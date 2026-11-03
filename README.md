@@ -5,7 +5,7 @@ Two pages, published with GitHub Pages at jergusino.com/palette-pack/:
 - `index.html` (jergusino.com/palette-pack/): leave your email, get the palettes by email.
   Every signup gets the link, whether or not the address is already in the sheet.
 - `pack/` (jergusino.com/palette-pack/pack/): the download page. A button downloads
-  `pack/Jergusino-Farby-12-paliet.pdf` (15 pages, 1080 × 1350), and all 12 palettes are
+  `pack/palette-pack.pdf` (15 pages, 1080 × 1350), and all 12 palettes are
   shown on the page; clicking a colour copies its HEX code.
 
 Same setup as jergusino.com/font-tool/, only the freebie is different.
@@ -19,7 +19,7 @@ python3 tools/build_pdf.py
 ```
 
 It uses the site's own fonts from `assets/fonts/` and the card lockup in `tools/lockup.png`,
-and overwrites `pack/Jergusino-Farby-12-paliet.pdf`. The colours on `pack/index.html` are
+and overwrites `pack/palette-pack.pdf`. The colours on `pack/index.html` are
 written into the page, so if you change `PALETTES`, change the page too (or ask Claude to
 regenerate it).
 

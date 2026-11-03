@@ -1,4 +1,4 @@
-"""Builds pack/Jergusino-Farby-12-paliet.pdf: FARBY, 12 palettes in the Jergusino brand
+"""Builds pack/palette-pack.pdf: FARBY, 12 palettes in the Jergusino brand
 (1080 x 1350, Ink / Cream / Yellow, Slithen + Edwardian + Borisna). Edit PALETTES and re-run."""
 import re
 import sys
@@ -15,7 +15,7 @@ import tempfile
 # Run from anywhere: python3 tools/build_pdf.py   (needs reportlab and fonttools)
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = os.path.join(ROOT, "tools") + "/"
-OUT = os.path.join(ROOT, "pack", "Jergusino-Farby-12-paliet.pdf")
+OUT = os.path.join(ROOT, "pack", "palette-pack.pdf")
 
 # The site's .woff fonts (already patched with Slovak letters) -> temporary .ttf for reportlab
 FD = tempfile.mkdtemp() + "/"
