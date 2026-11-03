@@ -29,7 +29,7 @@ INK, CREAM, YEL = "#060909", "#FAF1D6", "#FFC600"
 W, H = 1080, 1350
 F = 43
 T = 68
-SMALL = 68
+SMALL = 34
 G = 17
 LINE = 1.3
 
@@ -114,7 +114,7 @@ def wrap(s, font, size, width):
     return lines
 
 
-def group_top_left(lines, width=960):
+def group_top_left(lines, width=760):
     y = F + 0.7 * SMALL
     for ln in lines:
         for sub in wrap(ln, "BO", SMALL, width):
@@ -150,6 +150,14 @@ def rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
+def cmyk(h):
+    r, g, b = [x / 255 for x in rgb(h)]
+    k = 1 - max(r, g, b)
+    if k >= 1:
+        return 0, 0, 0, 100
+    return tuple(round(v * 100) for v in ((1 - r - k) / (1 - k), (1 - g - k) / (1 - k), (1 - b - k) / (1 - k), k))
+
+
 def lum(h):
     def f(v):
         v /= 255
@@ -168,7 +176,7 @@ PALETTES = [
      [("oranž", "#FF6B35"), ("broskyňa", "#F7C59F"), ("krém", "#EFEFD0"), ("modrá", "#1A659E"), ("námornícka", "#004E89")]),
     ("Pastelový sen", "jemná a mäkká. na lifestyle, wellness a značky.",
      [("ružová", "#FFD6E0"), ("vanilka", "#FFEFCF"), ("ľadová", "#D4F0F0"), ("mätová", "#B8E0D2"), ("levanduľa", "#C5CAE9")]),
-    ("Polnoc", "hlboká a pokojná. na tech a tmavé témy.",
+    ("Polnoc", "hlboká a pokojná s teplým akcentom. na tech, UI a tmavé témy.",
      [("noc", "#0B132B"), ("atrament", "#1C2541"), ("tyrkys", "#5BC0BE"), ("jantár", "#E8A33D"), ("hmla", "#F5F0E6")]),
     ("Nočný klub", "tmavá a drzá, no stále čitateľná. na eventy, hudbu a plagáty.",
      [("noc", "#1B1A2E"), ("sliva", "#3D2C5E"), ("malina", "#D6456B"), ("jantár", "#F29E4C"), ("krém", "#F4E9D8")]),
@@ -222,25 +230,30 @@ for idx, (name, desc, cols) in enumerate(PALETTES):
     hexes = [h for _, h in cols]
     pool = hexes + [INK]
     ratio, bi, bj = max((contrast(hexes[i], pool[j]), i, j) for i in range(5) for j in range(len(pool)) if pool[j] != hexes[i])
-    group_top_left([desc, f"pár: {pool[bj]} na {hexes[bi]}"])
+    group_top_left([
+        desc,
+        f"najlepší pár: {pool[bj]} na {hexes[bi]}  ({ratio:.1f}:1)",
+    ], width=900)
 
-    sw_w, sw_h, gap = 300, 136, 12
-    y = 322
+    sw_w, sw_h, gap = 360, 100, 18
+    y = 250
     tx = F + sw_w + 28
     for nm, hx in cols:
         rect(F, y, sw_w, sw_h, hx)
-        if contrast(hx, INK) < 1.25:
+        if contrast(hx, INK) < 1.25:  # Ink-like swatches: hairline frame so the specimen is visible
             c.setStrokeColor(HexColor(CREAM))
             c.setLineWidth(2)
             c.rect(F + 1, H - y - sw_h + 1, sw_w - 2, sw_h - 2, stroke=1, fill=0)
         r_, g_, b_ = rgb(hx)
-        l1 = f"{nm}  {hx.upper()}"
-        assert tw(l1, "BO", SMALL) < W - F - tx, l1
-        text_at(tx, y + 50, l1)
-        text_at(tx, y + 122, f"rgb {r_} {g_} {b_}")
+        k = cmyk(hx)
+        text_at(tx, y + 0.7 * SMALL + 6, f"{nm}  {hx.upper()}")
+        l2 = f"rgb {r_} {g_} {b_}  cmyk {k[0]} {k[1]} {k[2]} {k[3]}"
+        assert tw(l2, "BO", SMALL * 0.88) < W - F - tx, l2
+        text_at(tx, y + 0.7 * SMALL + 6 + 40, l2, SMALL * 0.88)
         y += sw_h + gap
 
-    headline(name.upper(), 2 * T, script=f"paleta {idx + 1:02d}")
+    title = name.upper()
+    headline(title, fit(title, 2 * T, 3 * T), script=f"paleta {idx + 1:02d}")
     c.showPage()
 
 # 15 · End

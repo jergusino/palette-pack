@@ -29,7 +29,7 @@ const FREEBIES = {
     url: "https://jergusino.com/palette-pack/pack/",
     subject: "Tvoje palety FARBY od Jergušina",
     title: "Tvoje palety",
-    body: "12 paliet, ktoré spolu fungujú, každá s 5 farbami a ich HEX a RGB kódmi. Na stránke si stiahneš PDF a kliknutím na farbu skopíruješ jej kód.",
+    body: "12 paliet, ktoré spolu fungujú, každá s 5 farbami a ich HEX, RGB a CMYK kódmi. Na stránke si stiahneš PDF a kliknutím na farbu skopíruješ jej kód.",
     button: "stiahnuť palety",
   },
 };
