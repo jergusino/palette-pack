@@ -210,7 +210,8 @@ function sendConfirmation(email, token) {
  * Sends one email.
  * - If a Brevo API key is saved (Project Settings → Script properties → BREVO_API_KEY),
  *   it sends from SENDER_EMAIL (e.g. no-reply@jergusino.com) through Brevo.
- * - Otherwise, or if Brevo fails, it falls back to sending from this Google account.
+ * - Otherwise, or if Brevo fails, it sends through this Gmail account: from SENDER_EMAIL
+ *   if that address is added in Gmail as "Send mail as", else from the account itself.
  * Replies go to REPLY_TO, if set, so "reply unsubscribe" still reaches you.
  * Keys live in Script properties, never in this file, because this file is public on GitHub.
  */
@@ -234,10 +235,19 @@ function sendMail(to, subject, text, html) {
     console.error("Brevo refused the email (" + res.getResponseCode() + "): " + res.getContentText() + " — sending from Gmail instead.");
   }
 
-  const opts = { to: to, subject: subject, body: text, htmlBody: html, name: FROM_NAME };
+  // Gmail fallback. If SENDER_EMAIL is set up in this Gmail account as a "Send mail as"
+  // address, send from it; otherwise Gmail can only send from the account's own address.
+  const opts = { htmlBody: html, name: FROM_NAME };
   if (replyTo) opts.replyTo = replyTo;
-  MailApp.sendEmail(opts);
-  return "gmail";
+  if (GmailApp.getAliases().map(a => a.toLowerCase()).indexOf(sender.toLowerCase()) !== -1) {
+    opts.from = sender;
+    GmailApp.sendEmail(to, subject, text, opts);
+    return "gmail, from " + sender;
+  }
+  console.warn(sender + " is not a \"Send mail as\" address in this Gmail account, so the email goes out from " +
+    Session.getEffectiveUser().getEmail() + ". Add a Brevo key or set up the alias in Gmail settings.");
+  GmailApp.sendEmail(to, subject, text, opts);
+  return "gmail, from " + Session.getEffectiveUser().getEmail();
 }
 
 function json(status) {
@@ -286,5 +296,6 @@ function testSetup() {
   const link = ScriptApp.getService().getUrl() || "(not deployed yet)";
   const how = sendMail(me, "Test: confirmation email setup", "This is a test from your signup script. Link base: " + link,
     '<p style="font-family:Georgia,serif">This is a test from your signup script.</p>');
+  console.log("   Gmail \"Send mail as\" addresses: " + (GmailApp.getAliases().join(", ") || "none"));
   console.log("5. Sent a test email to " + me + " via " + how + ". If it says gmail but you expected Brevo, read the red error line above.");
 }
