@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Farby · Jergušino</title>
+  <meta name="description" content="FARBY: 12 farebných paliet, ktoré spolu fungujú. Zadarmo do tvojej schránky.">
+  <meta name="theme-color" content="#060909">
+  <meta name="color-scheme" content="dark">
+  <meta property="og:site_name" content="Jergušino">
+  <meta property="og:title" content="Farby · Jergušino">
+  <meta property="og:description" content="12 farebných paliet, ktoré spolu fungujú. Zadarmo do tvojej schránky.">
+  <meta property="og:image" content="assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/Slithen.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/Borisna.woff" as="font" type="font/woff" crossorigin>
+  <!-- main.css is a copy of the main site's stylesheet (jergusino.github.io/assets/css/main.css); newsletter.css adds the form -->
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/newsletter.css">
+</head>
+<body class="newsletter">
+  <a class="skip" href="#top">preskočiť na obsah</a>
+
+  <header class="top">
+    <a class="top-mark" href="/" aria-label="Jergušino, domov">
+      <img src="assets/img/wordmark.svg" alt="" width="1020" height="262">
+    </a>
+    <nav class="top-nav" aria-label="Hlavná navigácia">
+      <a href="/projects/">projekty <svg class="arr" viewBox="0 0 24 12" width="24" height="12" aria-hidden="true" focusable="false"><path d="M0 5h18V0l6 6-6 6V7H0z"/></svg></a>
+      <a href="/kontakt/">kontakt</a>
+    </nav>
+  </header>
+
+  <main id="top" tabindex="-1">
+    <div class="split">
+    <section class="hero hero--page hero--project">
+      <div class="lockup">
+        <p class="lead">balík</p>
+        <h1 class="title">Farby</h1>
+      </div>
+    </section>
+
+    <article class="prose">
+      <p class="big">12 paliet, ktoré spolu fungujú. Vyber jednu, hoď ju do projektu a rieš už len dizajn.</p>
+
+      <ul class="perks">
+        <li><svg class="arr" viewBox="0 0 24 12" aria-hidden="true" focusable="false"><path d="M0 5h18V0l6 6-6 6V7H0z"/></svg><span>12 paliet po 5 farieb s HEX a RGB kódmi</span></li>
+        <li><svg class="arr" viewBox="0 0 24 12" aria-hidden="true" focusable="false"><path d="M0 5h18V0l6 6-6 6V7H0z"/></svg><span>jeden krátky e-mail týždenne, nikdy viac</span></li>
+        <li><svg class="arr" viewBox="0 0 24 12" aria-hidden="true" focusable="false"><path d="M0 5h18V0l6 6-6 6V7H0z"/></svg><span>odhlásiš sa kedykoľvek, stačí odpísať „odhlásiť“</span></li>
+      </ul>
+
+      <form id="signup" class="signup" method="post" novalidate>
+        <label for="email">Tvoj e-mail</label>
+        <div class="row">
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="fine status">
+          <button type="submit">
+            <span class="btn-text">pošli mi palety</span>
+            <svg class="arr" viewBox="0 0 24 12" aria-hidden="true" focusable="false"><path d="M0 5h18V0l6 6-6 6V7H0z"/></svg>
+          </button>
+        </div>
+        <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </form>
+    </article>
+    </div>
+  </main>
+
+  <p class="fine" id="fine"><span>Odkaz na stiahnutie ti príde e-mailom hneď. Tvoj e-mail môžem zdieľať s partnermi, s ktorými spolupracujem. Odhlásiť sa môžeš kedykoľvek.</span></p>
+
+<script>
+  // Google Apps Script web app (see README.md). With list: "palette-pack" it emails the link to the download page right away.
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbwzb0EDm8Rme1YKbwV1A5090Xy8KaP20UOvHCXbhvao1tViq3Yg2vBaLdlMIsiN-4s/exec";
+
+  const form = document.getElementById("signup");
+  const email = document.getElementById("email");
+  const status = document.getElementById("status");
+  const button = form.querySelector("button");
+  const label = button.querySelector(".btn-text");
+
+  const messages = {
+    invalid: "Toto nevyzerá ako e-mailová adresa. Skús niečo ako meno@gmail.com.",
+    sent: "Hotovo. Odkaz na palety ti práve odišiel e-mailom. Pozri si schránku (aj spam).",
+    broken: "Niečo sa pokazilo na mojej strane. Skús to prosím neskôr.",
+    offline: "Nepodarilo sa to odoslať. Skontroluj pripojenie na internet a skús to znova.",
+    soon: "Prihlasovanie čoskoro spustím. Skús to o pár dní.",
+  };
+  const show = (key, isError) => {
+    status.classList.toggle("error", !!isError);
+    status.textContent = messages[key];
+  };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (form.website.value) return;
+    const value = email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { show("invalid", true); email.focus(); return; }
+    if (!SHEET_URL) { show("soon"); return; }
+
+    button.disabled = true;
+    label.textContent = "odosielam…";
+    status.textContent = "";
+    const body = new URLSearchParams({ email: value, source: location.hostname || "local", consent: "Súhlasil s posielaním súborov a noviniek e-mailom a so zdieľaním e-mailu s partnermi", list: "palette-pack" });
+    try {
+      let result = "sent", res = null;
+      try {
+        res = await fetch(SHEET_URL, { method: "POST", body });
+      } catch (readError) {
+        // Some browsers block reading Google's reply; send it anyway and assume it went through.
+        await fetch(SHEET_URL, { method: "POST", mode: "no-cors", body });
+      }
+      if (res) {
+        try { result = (await res.json()).status; } catch (badReply) { result = "broken"; }
+      }
+      if (result === "invalid" || result === "broken") { show(result, true); return; }
+      form.classList.add("done");
+      show("sent");
+    } catch (err) {
+      show("offline", true);
+    } finally {
+      button.disabled = false;
+      label.textContent = "pošli mi palety";
+    }
+  });
+</script>
+</body>
+</html>

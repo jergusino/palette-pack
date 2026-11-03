@@ -1,0 +1,59 @@
+/* Newsletter page: the main site's stylesheet (main.css) plus the signup form.
+   Same tokens, same three colours, no rounded corners, no fills. */
+
+body.newsletter .prose { margin-top: calc(var(--F) * 2); }
+.prose .big { font-size: clamp(1.4rem, 2.4vw, 2.6rem); line-height: 1.15; max-width: 30ch; }
+
+.perks { list-style: none; margin-top: 1.6em; }
+.perks li { display: flex; align-items: baseline; gap: 0.7em; }
+.perks li + li { margin-top: 0.35em; }
+.perks .arr { flex: none; margin: 0; }
+
+.signup { margin-top: 2.4em; }
+.signup label { display: block; margin-bottom: 0.4em; }
+.signup .row { display: flex; gap: 12px; flex-wrap: wrap; }
+.signup input[type="email"] {
+  flex: 1 1 16em; min-width: 0; height: 58px;
+  font: inherit; color: var(--cream); caret-color: var(--yellow);
+  background: var(--ink); border: 2px solid var(--cream); border-radius: 0;
+  padding: 0 16px; outline: none; -webkit-appearance: none; appearance: none;
+}
+.signup input[type="email"]:hover, .signup input[type="email"]:focus { border-color: var(--yellow); }
+.signup input:-webkit-autofill { -webkit-text-fill-color: var(--cream); -webkit-box-shadow: 0 0 0 100px var(--ink) inset; }
+.signup button {
+  height: 58px; padding: 0 22px;
+  font: inherit; color: var(--cream); background: var(--ink);
+  border: 2px solid var(--cream); border-radius: 0; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em; white-space: nowrap;
+}
+.signup button .arr { margin: 0; }
+.signup button:hover, .signup button:focus-visible { color: var(--yellow); border-color: var(--yellow); }
+.signup button[disabled] { cursor: progress; }
+
+/* small print: quiet grey (outside the brand palette on purpose), at the very bottom of the page (the site has no footer) */
+.fine { max-width: var(--W); margin: 0 auto; padding: calc(var(--F) * 2) var(--F) calc(var(--F) * 4); box-sizing: border-box; font-size: 0.875rem; line-height: 1.45; color: #8c897c; }
+.fine > span { display: block; max-width: 60ch; }
+.status { margin-top: 0.9em; min-height: 1.3em; }
+.status.error { color: var(--yellow); }
+.done .row, .done label { display: none; }
+.done .status { font-size: clamp(1.4rem, 2.4vw, 2.6rem); line-height: 1.15; max-width: 30ch; }
+
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+@media (max-width: 560px) {
+  .signup button { flex: 1 1 100%; }
+}
+
+/* wide screens: the title on the left, the text and the form next to it on the right */
+@media (min-width: 1100px) {
+  .split {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: calc(var(--F) * 5);
+    align-items: start;
+    padding: calc(var(--F) * 7) var(--F) 0;
+  }
+  .split .hero--project { padding-top: 0; --title-size: calc(var(--T) * 2.4); }
+  .split .hero--project .lockup { margin: 0; }
+  body.newsletter .split .prose { margin: 0; max-width: 40em; padding-top: calc(var(--F) * 1.5); }
+}
