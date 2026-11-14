@@ -1,33 +1,23 @@
-/* Palette pack download page: the main site's stylesheet + newsletter.css + this. Same three colours, square corners. */
+/* Palette pack download page: main.css + newsletter.css + this. */
 
 .pack .intro { margin-top: 1em; max-width: 46ch; }
-
-.dl {
-  display: inline-flex; align-items: center; gap: 0.5em; margin-top: 2em;
-  height: 58px; padding: 0 22px; border: 2px solid var(--yellow); color: var(--cream);
-}
-.prose .dl { color: var(--cream); text-decoration: none; }
-.prose .dl:hover, .prose .dl:focus-visible { color: var(--yellow); }
-.dl .arr { margin: 0; transform: rotate(90deg); }
-.dl-meta { margin-top: 0.6em; font-size: 0.875rem; color: #8c897c; }
+.dl { margin-top: 2em; }
+.dl .arr { transform: rotate(90deg); }
+.cta.dl:hover .arr, .cta.dl:focus-visible .arr { transform: rotate(90deg) translateX(4px); }
+.dl-meta { margin-top: 0.8em; font-size: 0.875rem; color: var(--ash); }
 
 /* the 12 palettes */
-.pals {
-  max-width: var(--W); margin: calc(var(--F) * 6) auto 0; padding: 0 var(--F); box-sizing: border-box;
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
-  gap: calc(var(--F) * 3) calc(var(--F) * 2);
-}
-.pals-tip { grid-column: 1 / -1; color: var(--yellow); min-height: 1.3em; }
-.pal { padding-top: calc(var(--F) * 1.2); border-top: 2px solid var(--cream); }
-.pal-no { font-family: var(--f-script); color: var(--yellow); font-size: 1.9rem; line-height: 1; }
-.pal-h { font-family: var(--f-head); font-weight: 400; text-transform: uppercase; line-height: 0.9; font-size: clamp(2rem, 3.2vw, 2.8rem); margin-top: 0.3em; }
-.pal-d { margin-top: 0.5em; font-size: 0.95rem; line-height: 1.35; min-height: 2.7em; }
+.pals { padding: 0 var(--m); margin-top: calc(var(--m) * 1.6); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: calc(var(--gap) * 2) var(--gap); }
+.pals-tip { grid-column: 1 / -1; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow); min-height: 1.3em; }
+.pal { padding: 22px; border-radius: var(--r-card); box-shadow: inset 0 0 0 2px var(--line); }
+.pal-no { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ash); }
+.pal-h { font-weight: 800; letter-spacing: -0.03em; line-height: 1.02; color: var(--paper); font-size: clamp(1.5rem, 2.2vw, 2rem); margin-top: 0.35em; }
+.pal-d { margin-top: 0.5em; font-size: 0.95rem; line-height: 1.4; min-height: 2.8em; color: var(--paper-soft); }
 
-.sws { list-style: none; margin-top: 1em; display: grid; gap: 6px; }
+.sws { list-style: none; margin-top: 1.1em; display: grid; gap: 6px; }
 .sws li { display: grid; grid-template-columns: 4.5rem 1fr auto; align-items: center; gap: 0.8em; }
-.sw {
-  height: 2.6rem; width: 100%; background: var(--c); border: 0; border-radius: 0; padding: 0; cursor: copy;
-}
-.sw--dark { outline: 2px solid var(--cream); outline-offset: -2px; }
-.sw:hover, .sw:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
-.sw-h { font-variant-numeric: tabular-nums; }
+.sw { height: 2.6rem; width: 100%; background: var(--c); border: 0; border-radius: 10px; padding: 0; cursor: copy; transition: transform 0.15s var(--ease-out); }
+.sw--dark { box-shadow: inset 0 0 0 2px var(--line); }
+.sw:hover, .sw:focus-visible { transform: scale(1.06); outline: 3px solid var(--yellow); outline-offset: 2px; }
+.sw-n { color: var(--paper-soft); font-size: 0.95rem; }
+.sw-h { font-family: var(--mono); font-size: 0.8rem; color: var(--ash); font-variant-numeric: tabular-nums; }

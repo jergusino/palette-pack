@@ -41,6 +41,6 @@ The newsletter and font-tool repos have older copies of this file; this one repl
 
 ## Licences
 
-The PDF embeds Borisna, Slithen and Edwardian Script. Borisna is a demo font, free for
+The web page uses Bricolage Grotesque and DM Mono (open source, SIL OFL). The PDF itself still embeds Borisna, Slithen and Edwardian Script. Borisna is a demo font, free for
 private, non-profit use only. Check that your Slithen and Edwardian Script licences cover
 web use and embedding in a PDF you give away.
