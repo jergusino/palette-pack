@@ -3,7 +3,7 @@
 Two pages, published with GitHub Pages at jergusino.com/palette-pack/:
 
 - `index.html` (jergusino.com/palette-pack/): leave your email, get the palettes by email.
-  Every signup gets the link, whether or not the address is already in the sheet.
+  The link is mailed after the address is confirmed.
 - `pack/` (jergusino.com/palette-pack/pack/): the download page. A button downloads
   `pack/palette-pack.pdf` (15 pages, 1080 × 1350), and all 12 palettes are
   shown on the page; clicking a colour copies its HEX code.
@@ -25,19 +25,9 @@ regenerate it).
 
 ## The email
 
-The form posts to the same Google Apps Script as the newsletter and the Font Tool
-(`apps-script/Code.gs`), with `list=palette-pack`. The script:
+The form posts `list=palette-pack` to the `jergusino-mail` Cloudflare Worker at `https://api.jergusino.com/subscribe` (code and setup: `tools/mail-worker/` in the jergusino.github.io repo). It sends mail through Brevo from noreply@jergusino.com and stores signups in its D1 database. The Worker mails a confirm link; after the click it mails the link to jergusino.com/palette-pack/pack/ and shows it on the confirm page.
 
-- writes the signup into the **Subscribers** tab of the "Newsletter signups" sheet, with
-  **List** = `palette-pack` (once per address),
-- emails the link to jergusino.com/palette-pack/pack/ straight away, every time it is asked for.
-
-Freebies live in the `FREEBIES` table at the top of `Code.gs` (`font-tool`, `palette-pack`).
-A new freebie is one more entry there plus a signup page that posts its key as `list`.
-
-After changing `Code.gs`, paste it into Apps Script and deploy a **New version**
-(Deploy → Manage deployments → pencil → Version: New version). The /exec link stays the same.
-The newsletter and font-tool repos have older copies of this file; this one replaces them.
+A new freebie is one more entry in `LISTS` in the Worker plus a signup page that posts its key as `list`.
 
 ## Licences
 
